@@ -1,6 +1,5 @@
 import os
 import win32api
-import win32com
 import win32con
 from win32com.shell import shell, shellcon
 

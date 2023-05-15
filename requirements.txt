@@ -1,2 +1,11 @@
+evdev==1.6.1
+keyboard==0.13.5
 Pillow==9.5.0
+pygame==2.4.0
+pynput==1.7.6
+PyQt5==5.15.9
+PyQt5-Qt5==5.15.2
+PyQt5-sip==12.12.1
 python-vlc==3.0.18122
+python-xlib==0.33
+six==1.16.0

